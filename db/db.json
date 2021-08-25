@@ -1,4 +1,6 @@
 [
   { "title": "Test Title", "text": "Test text" },
-  { "title": "sdasdasdasd", "text": "sdasdsadasdsd" }
+  { "title": "sdasdasdasd", "text": "sdasdsadasdsd" },
+  { "title": "Test Note", "text": "Bobby" },
+  { "title": "hey hey", "text": "helloooo" }
 ]
