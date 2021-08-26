@@ -1,8 +1,9 @@
 const router = require("express").Router();
 const fs = require("fs");
+const uuid = require("uuid");
 
-router.get("/api/notes", (req, res) => {
-  fs.readFile("../../db/db.json", "utf8", function (err, data) {
+router.get("/notes", (req, res) => {
+  fs.readFile("./db/db.json", "utf8", function (err, data) {
     let noteData = [];
     if (err) {
       throw err;
@@ -16,17 +17,18 @@ router.get("/api/notes", (req, res) => {
   });
 });
 
-router.post("/api/notes", (req, res) => {
+router.post("/notes", (req, res) => {
   let newNote = req.body;
 
-  fs.readFile("../../db/db.json", "utf8", (err, data) => {
+  fs.readFile("./db/db.json", "utf8", (err, data) => {
     if (err) {
       console.log(`err at the database ${err}`);
     } else if (data.length > 2) {
       obj = JSON.parse(data);
+      newNote.id = uuid.v4().substring(0, 4);
       obj.push(newNote);
 
-      fs.writeFile("../../db/db.json", JSON.stringify(obj), "utf8", (err) => {
+      fs.writeFile("./db/db.json", JSON.stringify(obj), "utf8", (err) => {
         if (err) {
           throw err;
         }
@@ -34,8 +36,9 @@ router.post("/api/notes", (req, res) => {
       });
     } else {
       obj = [];
+      newNote.id = uuid.v4().substring(0, 4);
       obj.push(newNote);
-      fs.writeFile("../../db/db.json", JSON.stringify(obj), "utf8", (err) => {
+      fs.writeFile("./db/db.json", JSON.stringify(obj), "utf8", (err) => {
         if (err) {
           throw err;
         }
@@ -45,12 +48,14 @@ router.post("/api/notes", (req, res) => {
   });
 });
 
-router.delete("/api/notes/:id", (req, res) => {
-  fs.readFile("../../db/db.json", "utf8", (err, data) => {
+router.delete("/notes/:id", (req, res) => {
+  fs.readFile("./db/db.json", "utf8", (err, data) => {
     if (err) {
       throw err;
     }
+    console.log(data);
     let objNew = JSON.parse(data);
+    console.log(objNew);
     for (let i = 0; i < objNew.length; i++) {
       if (req.params.id == objNew[i].id) {
         objNew.splice(i, 1);
@@ -58,7 +63,7 @@ router.delete("/api/notes/:id", (req, res) => {
         console.log("Id does not match");
       }
     }
-    const output = fs.writeFile("./model/db.json", JSON.stringify(objNew), (err) => {
+    const output = fs.writeFile("./db/db.json", JSON.stringify(objNew), (err) => {
       if (err) {
         throw err;
       }
