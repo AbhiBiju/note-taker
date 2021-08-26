@@ -23,7 +23,7 @@ router.post("/notes", (req, res) => {
   fs.readFile("./db/db.json", "utf8", (err, data) => {
     if (err) {
       console.log(`err at the database ${err}`);
-    } else if (data.length > 2) {
+    } else if (data.length > 0) {
       obj = JSON.parse(data);
       newNote.id = uuid.v4().substring(0, 4);
       obj.push(newNote);
@@ -44,6 +44,7 @@ router.post("/notes", (req, res) => {
         }
         console.log("Note saved.");
       });
+      res.json(newNote);
     }
   });
 });
@@ -56,7 +57,6 @@ router.delete("/notes/:id", (req, res) => {
     let objNew = JSON.parse(data);
 
     const deleteThis = objNew.findIndex((note) => note.id === req.params.id);
-    console.log(deleteThis);
 
     objNew.splice(deleteThis, 1);
 
@@ -66,7 +66,7 @@ router.delete("/notes/:id", (req, res) => {
       }
       console.log("Note rewritten");
     });
-    res.send(output);
+    res.json(output);
   });
 });
 
