@@ -8,7 +8,7 @@ router.get("/notes", (req, res) => {
     if (err) {
       throw err;
     }
-    if (data.length > 2) {
+    if (data.length > 0) {
       noteData = JSON.parse(data);
       res.json(noteData);
     } else {
@@ -53,16 +53,13 @@ router.delete("/notes/:id", (req, res) => {
     if (err) {
       throw err;
     }
-    console.log(data);
     let objNew = JSON.parse(data);
-    console.log(objNew);
-    for (let i = 0; i < objNew.length; i++) {
-      if (req.params.id == objNew[i].id) {
-        objNew.splice(i, 1);
-      } else {
-        console.log("Id does not match");
-      }
-    }
+
+    const deleteThis = objNew.findIndex((note) => note.id === req.params.id);
+    console.log(deleteThis);
+
+    objNew.splice(deleteThis, 1);
+
     const output = fs.writeFile("./db/db.json", JSON.stringify(objNew), (err) => {
       if (err) {
         throw err;
