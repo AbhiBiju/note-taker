@@ -74,6 +74,7 @@ const handleNoteSave = (e) => {
     title: noteTitle.value,
     text: noteText.value,
   };
+
   saveNote(newNote).then(() => {
     renderActiveNote();
     getAndRenderNotes();
